@@ -16,7 +16,7 @@ import java.util.List;
 public class Role {
 
     @Id
-    private String roleID;
+    private String roleName;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
