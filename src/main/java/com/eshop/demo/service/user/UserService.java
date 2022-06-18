@@ -1,29 +1,38 @@
-package com.eshop.demo.services.user;
+package com.eshop.demo.service.user;
 
+import com.eshop.demo.dao.CartJpaRepository;
 import com.eshop.demo.dao.UserJpaRepository;
 import com.eshop.demo.exceptions.EntityNotFound;
 import com.eshop.demo.exceptions.EntityStateException;
+import com.eshop.demo.model.Cart;
 import com.eshop.demo.model.User;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
+@Service("UserService")
 public class UserService implements UserSPI {
 
     private final UserJpaRepository repository;
+    private final CartJpaRepository cartRepository;
 
-    public UserService(UserJpaRepository repository) {
+    public UserService(UserJpaRepository repository,
+                       CartJpaRepository cartRepository) {
         this.repository = repository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
     public User create(User user) {
-        if (repository.findById(user.getUserID()).isPresent())
+        if (repository.findByUsername(user.getUsername()).isPresent())
             throw new EntityStateException(user);
         repository.save(user);
+        Cart cart = new Cart(user.getUserID(), user, new ArrayList<>(), LocalDateTime.now(), 0);
+        cartRepository.save(cart);
+        user.setCart(cart);
         return repository.findById(user.getUserID()).get();
     }
 
@@ -43,11 +52,16 @@ public class UserService implements UserSPI {
     }
 
     @Override
-    public User update(User user) {
-        if (repository.findById(user.getUserID()).isEmpty())
+    public User update(String username, User user) {
+        if (repository.findByUsername(user.getUsername()).isEmpty())
             throw new EntityNotFound(user);
-        repository.save(user);
-        return repository.findById(user.getUserID()).get();
+        User oldUser = repository.findByUsername(user.getUsername()).get();
+        oldUser.setUsername(user.getUsername());
+        oldUser.setSurname(user.getSurname());
+        oldUser.setName(user.getName());
+        oldUser.setAddress(user.getAddress());
+        repository.save(oldUser);
+        return repository.findById(oldUser.getUserID()).get();
     }
 
     @Override
@@ -63,4 +77,5 @@ public class UserService implements UserSPI {
                 repository.findByUsername(username).orElseThrow(EntityNotFound::new)
         );
     }
+
 }

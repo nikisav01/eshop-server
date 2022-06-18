@@ -16,4 +16,19 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, "[EntityStateException] Message: " + ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
+    @ExceptionHandler(value = {EntityNotFound.class})
+    public ResponseEntity<Object> handleEntityNotFound(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, "[EntityNotFound] Message: " + ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(value = {IncorrectRequest.class})
+    public ResponseEntity<Object> handleIncorrectRequest(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, "[IncorrectRequest] Message: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(value = {UnprocessableRequest.class})
+    public ResponseEntity<Object> handleUnprocessableRequest(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, "[UnprocessableRequest] Message: " + ex.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
+    }
+
 }

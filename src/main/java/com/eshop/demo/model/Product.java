@@ -28,9 +28,8 @@ public class Product {
 
     private Integer quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<CartItem> cartItem;
 
     @ManyToMany(mappedBy = "likedProducts")
     private List<User> usersSaved;

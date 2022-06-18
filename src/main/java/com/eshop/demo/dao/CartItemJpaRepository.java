@@ -1,11 +1,9 @@
 package com.eshop.demo.dao;
 
-import com.eshop.demo.model.Product;
+import com.eshop.demo.model.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface ProductJpaRepository extends JpaRepository<Product, Long> {
+public interface CartItemJpaRepository extends JpaRepository<CartItem, Long> {
 }

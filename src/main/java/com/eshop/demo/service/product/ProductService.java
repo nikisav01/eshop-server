@@ -1,27 +1,30 @@
-package com.eshop.demo.services.product;
+package com.eshop.demo.service.product;
 
+import com.eshop.demo.dao.CategoryJpaRepository;
 import com.eshop.demo.dao.ProductJpaRepository;
 import com.eshop.demo.exceptions.EntityNotFound;
-import com.eshop.demo.exceptions.EntityStateException;
+import com.eshop.demo.exceptions.IncorrectRequest;
 import com.eshop.demo.model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
+@Service("ProductService")
 public class ProductService implements ProductSPI {
 
     private final ProductJpaRepository repository;
 
-    public ProductService(ProductJpaRepository repository) {
+    private final CategoryJpaRepository categoryRepository;
+
+    public ProductService(ProductJpaRepository repository,
+                          CategoryJpaRepository categoryRepository) {
         this.repository = repository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public Product create(Product product) {
-        if (repository.findById(product.getProductID()).isPresent())
-            throw new EntityStateException(product);
         repository.save(product);
         return repository.findById(product.getProductID()).get();
     }
@@ -32,12 +35,21 @@ public class ProductService implements ProductSPI {
     }
 
     @Override
+    public Collection<Product> readByCategoryId(Long categoryID) {
+        return categoryRepository.findById(categoryID).orElseThrow(
+                () -> new EntityNotFound("category " + categoryID)
+        ).getProducts();
+    }
+
+    @Override
     public Collection<Product> readAll() {
         return repository.findAll();
     }
 
     @Override
-    public Product update(Product product) {
+    public Product update(Long id, Product product) {
+        if (!id.equals(product.getProductID()))
+            throw new IncorrectRequest("id doesn't match productID.");
         if (repository.findById(product.getProductID()).isEmpty())
             throw new EntityNotFound(product);
         repository.save(product);

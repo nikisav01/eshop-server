@@ -1,4 +1,4 @@
-package com.eshop.demo.services.role;
+package com.eshop.demo.service.role;
 
 import com.eshop.demo.model.Role;
 import java.util.Collection;

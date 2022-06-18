@@ -1,27 +1,30 @@
-package com.eshop.demo.services.category;
+package com.eshop.demo.service.category;
 
 import com.eshop.demo.dao.CategoryJpaRepository;
+import com.eshop.demo.dao.ProductJpaRepository;
 import com.eshop.demo.exceptions.EntityNotFound;
 import com.eshop.demo.exceptions.EntityStateException;
 import com.eshop.demo.model.Category;
+import com.eshop.demo.model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
+@Service("CategoryService")
 public class CategoryService implements CategorySPI {
 
     private final CategoryJpaRepository repository;
 
-    public CategoryService(CategoryJpaRepository repository) {
+    private final ProductJpaRepository productRepository;
+
+    public CategoryService(CategoryJpaRepository repository, ProductJpaRepository productRepository) {
         this.repository = repository;
+        this.productRepository = productRepository;
     }
 
     @Override
     public Category create(Category category) {
-        if (repository.findById(category.getCategoryID()).isPresent())
-            throw new EntityStateException(category);
         repository.save(category);
         return repository.findById(category.getCategoryID()).get();
     }
@@ -37,7 +40,7 @@ public class CategoryService implements CategorySPI {
     }
 
     @Override
-    public Category update(Category category) {
+    public Category update(Long id, Category category) {
         if (repository.findById(category.getCategoryID()).isEmpty())
             throw new EntityNotFound(category);
         repository.save(category);
@@ -50,4 +53,14 @@ public class CategoryService implements CategorySPI {
             throw new EntityNotFound();
         repository.deleteById(id);
     }
+
+    @Override
+    public Category addProduct(Long categoryID, Long productID) {
+        Category category = repository.findById(categoryID).orElseThrow(EntityNotFound::new);
+        Product product = productRepository.findById(productID).orElseThrow(EntityNotFound::new);
+        category.getProducts().add(product);
+        repository.save(category);
+        return repository.findById(categoryID).get();
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.eshop.demo.services.product;
+package com.eshop.demo.service.product;
 
 import com.eshop.demo.model.Product;
 
@@ -11,9 +11,11 @@ public interface ProductSPI {
 
     Optional<Product> readById(Long id);
 
+    Collection<Product> readByCategoryId(Long categoryID);
+
     Collection<Product> readAll();
 
-    Product update(Product product);
+    Product update(Long id, Product product);
 
     void deleteById(Long id);
 

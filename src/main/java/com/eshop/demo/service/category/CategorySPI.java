@@ -1,4 +1,4 @@
-package com.eshop.demo.services.category;
+package com.eshop.demo.service.category;
 
 import com.eshop.demo.model.Category;
 
@@ -13,8 +13,10 @@ public interface CategorySPI {
 
     Collection<Category> readAll();
 
-    Category update(Category category);
+    Category update(Long id, Category category);
 
     void deleteById(Long id);
+
+    Category addProduct(Long categoryID, Long productID);
 
 }

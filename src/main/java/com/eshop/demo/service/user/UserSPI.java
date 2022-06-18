@@ -1,9 +1,8 @@
-package com.eshop.demo.services.user;
+package com.eshop.demo.service.user;
 
 import com.eshop.demo.model.User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public interface UserSPI {
@@ -16,7 +15,7 @@ public interface UserSPI {
 
     Collection<User> readAll();
 
-    User update(User user);
+    User update(String username, User user);
 
     void deleteById(Long id);
 

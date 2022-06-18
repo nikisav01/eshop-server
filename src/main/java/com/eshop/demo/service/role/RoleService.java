@@ -1,4 +1,4 @@
-package com.eshop.demo.services.role;
+package com.eshop.demo.service.role;
 
 import com.eshop.demo.dao.RoleJpaRepository;
 import com.eshop.demo.exceptions.EntityNotFound;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
+@Service("RoleService")
 public class RoleService implements RoleSPI{
 
     private final RoleJpaRepository repository;
