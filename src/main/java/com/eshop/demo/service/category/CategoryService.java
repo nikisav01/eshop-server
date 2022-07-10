@@ -3,12 +3,12 @@ package com.eshop.demo.service.category;
 import com.eshop.demo.dao.CategoryJpaRepository;
 import com.eshop.demo.dao.ProductJpaRepository;
 import com.eshop.demo.exceptions.EntityNotFound;
-import com.eshop.demo.exceptions.EntityStateException;
 import com.eshop.demo.model.Category;
 import com.eshop.demo.model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service("CategoryService")
@@ -25,8 +25,7 @@ public class CategoryService implements CategorySPI {
 
     @Override
     public Category create(Category category) {
-        repository.save(category);
-        return repository.findById(category.getCategoryID()).get();
+        return repository.save(category);
     }
 
     @Override
@@ -58,7 +57,9 @@ public class CategoryService implements CategorySPI {
     public Category addProduct(Long categoryID, Long productID) {
         Category category = repository.findById(categoryID).orElseThrow(EntityNotFound::new);
         Product product = productRepository.findById(productID).orElseThrow(EntityNotFound::new);
-        category.getProducts().add(product);
+        List<Product> products = category.getProducts();
+        if (!products.contains(product))
+            products.add(product);
         repository.save(category);
         return repository.findById(categoryID).get();
     }

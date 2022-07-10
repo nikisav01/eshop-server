@@ -1,9 +1,7 @@
 package com.eshop.demo.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,7 +10,8 @@ import java.util.List;
 @Table(name = "entity_user")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -32,7 +31,9 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private String address;
+    private String address; // address should be a class instead of attribute
+
+    private String pathToPhoto;
 
     @ManyToMany
     @JoinTable(
@@ -53,4 +54,21 @@ public class User {
     )
     private List<Product> likedProducts;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!userID.equals(user.userID)) return false;
+        return username.equals(user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userID.hashCode();
+        result = 31 * result + username.hashCode();
+        return result;
+    }
 }

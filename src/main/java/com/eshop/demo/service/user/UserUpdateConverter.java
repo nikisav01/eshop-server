@@ -20,6 +20,7 @@ public class UserUpdateConverter {
                 userUpdateDTO.getSurname(),
                 userUpdateDTO.getName(),
                 userUpdateDTO.getAddress(),
+                "",
                 new ArrayList<>(),
                 null,
                 new ArrayList<>()

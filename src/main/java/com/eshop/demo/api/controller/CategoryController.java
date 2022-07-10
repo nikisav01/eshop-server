@@ -7,6 +7,7 @@ import com.eshop.demo.service.category.CategoryConverter;
 import com.eshop.demo.service.category.CategorySPI;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CategoryController {
         this.categoryConverter = categoryConverter;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CategoryDTO create(@RequestBody CategoryDTO categoryDTO) {
         return categoryConverter.fromModel(categorySPI.create(categoryConverter.toModel(categoryDTO)));

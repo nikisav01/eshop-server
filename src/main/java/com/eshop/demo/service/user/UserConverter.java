@@ -31,6 +31,7 @@ public class UserConverter {
                 userDTO.getSurname(),
                 userDTO.getName(),
                 userDTO.getAddress(),
+                "",
                 userDTO.getRolesIDs().stream()
                         .map(roleID -> roleSPI.readById(roleID)
                                 .orElseThrow(EntityNotFound::new))

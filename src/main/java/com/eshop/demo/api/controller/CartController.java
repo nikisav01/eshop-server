@@ -5,6 +5,7 @@ import com.eshop.demo.exceptions.EntityNotFound;
 import com.eshop.demo.service.cart.CartConverter;
 import com.eshop.demo.service.cart.CartSPI;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CartController {
         this.cartConverter = cartConverter;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CartDTO create(@RequestBody CartDTO cartDTO) {
         return cartConverter.fromModel(cartSPI.create(cartConverter.toModel(cartDTO)));

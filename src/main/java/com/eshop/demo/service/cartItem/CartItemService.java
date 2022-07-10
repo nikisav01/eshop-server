@@ -20,8 +20,7 @@ public class CartItemService implements CartItemSPI {
 
     @Override
     public CartItem create(CartItem cartItem) {
-        repository.save(cartItem);
-        return repository.findById(cartItem.getCartItemID()).get();
+        return repository.save(cartItem);
     }
 
     @Override

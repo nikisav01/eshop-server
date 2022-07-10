@@ -22,8 +22,7 @@ public class RoleService implements RoleSPI{
     public Role create(Role role) {
         if (repository.findById(role.getRoleName()).isPresent())
             throw new EntityStateException(role);
-        repository.save(role);
-        return repository.findById(role.getRoleName()).get();
+        return repository.save(role);
     }
 
     @Override

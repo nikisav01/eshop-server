@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service("CartService")
@@ -38,8 +39,7 @@ public class CartService implements CartSPI {
         if (repository.findById(cart.getCartID()).isPresent())
             throw new EntityStateException(cart);
         cart.setTotalPrice(0);
-        repository.save(cart);
-        return repository.findById(cart.getCartID()).get();
+        return repository.save(cart);
     }
 
     @Override
@@ -77,9 +77,17 @@ public class CartService implements CartSPI {
             throw new UnprocessableRequest("Not enough products in storage.");
         product.setQuantity(product.getQuantity() - quantity);
         productRepository.save(product);
-        CartItem item = new CartItem(null, product, cart, quantity);
-        cartItemRepository.save(item);
-        cart.getCartItems().add(item);
+        if (cart.getCartItems().stream().noneMatch(cartItem -> {
+            if (cartItem.getProduct().getProductID().equals(productID)) {
+                cartItem.setQuantity(cartItem.getQuantity() + quantity);
+                return true;
+            };
+            return false;
+        })) {
+            CartItem item = new CartItem(null, product, cart, quantity);
+            cartItemRepository.save(item);
+            cart.getCartItems().add(item);
+        }
         cart.setTotalPrice(cart.getTotalPrice() + product.getPrice() * quantity);
         cart.setLastChangeTime(LocalDateTime.now());
         repository.save(cart);

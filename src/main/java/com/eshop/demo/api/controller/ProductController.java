@@ -7,7 +7,10 @@ import com.eshop.demo.service.product.ProductConverter;
 import com.eshop.demo.service.product.ProductSPI;
 import com.eshop.demo.service.product.ProductUpdateConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,14 +32,20 @@ public class ProductController {
         this.productUpdateConverter = productUpdateConverter;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ProductUpdateDTO create(@RequestBody ProductUpdateDTO productDTO) {
         return productUpdateConverter.fromModel(productSPI.create(productUpdateConverter.toModel(productDTO)));
     }
 
+    @PostMapping("{productID}/photos")
+    public void savePhoto(@PathVariable("productID") Long productID, @RequestParam("photo") MultipartFile multipartFile) {
+        productSPI.savePhoto(productID, multipartFile);
+    }
+
     @GetMapping
-    public List<ProductDTO> getAll() {
-        return productConverter.fromModelMany(productSPI.readAll());
+    public Page<ProductUpdateDTO> getAll(@RequestParam int page, @RequestParam int size) {
+        return productSPI.readAll(page, size);
     }
 
     @GetMapping("/{id}")
@@ -45,8 +54,10 @@ public class ProductController {
     }
 
     @GetMapping("/categories/{categoryID}")
-    public List<ProductUpdateDTO> getByCategoryId(@PathVariable Long categoryID) {
-        return productUpdateConverter.fromModelMany(productSPI.readByCategoryId(categoryID));
+    public Page<ProductUpdateDTO> getByCategoryId(@PathVariable Long categoryID,
+                                                  @RequestParam int page,
+                                                  @RequestParam int size) {
+        return productSPI.readByCategoryId(categoryID, page, size);
     }
 
     @PutMapping("/{id}")
