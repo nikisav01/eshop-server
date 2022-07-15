@@ -16,7 +16,7 @@ public class CartDTO {
 
     private Long userID;
 
-    private List<CartItemDTO> cartItemsIDs;
+    private List<CartItemDTO> cartItems;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastChangeTime;

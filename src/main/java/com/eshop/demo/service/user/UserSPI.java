@@ -1,5 +1,6 @@
 package com.eshop.demo.service.user;
 
+import com.eshop.demo.model.Cart;
 import com.eshop.demo.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,8 @@ public interface UserSPI {
     Optional<User> readByUsername(String username);
 
     Collection<User> readAll();
+
+    Cart readCartByUsername(String username);
 
     User update(String username, User user);
 

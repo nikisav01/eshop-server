@@ -33,7 +33,7 @@ public class CartConverter {
         return new Cart(
                 cartDTO.getCartID(),
                 userSPI.readById(cartDTO.getUserID()).orElseThrow(EntityNotFound::new),
-                cartDTO.getCartItemsIDs().stream()
+                cartDTO.getCartItems().stream()
                         .map(cartItem -> cartItemSPI.readById(cartItem.cartID()).orElseThrow(EntityNotFound::new))
                         .collect(Collectors.toList()),
                 cartDTO.getLastChangeTime(),

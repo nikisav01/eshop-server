@@ -74,6 +74,12 @@ public class UserService implements UserSPI {
     }
 
     @Override
+    public Cart readCartByUsername(String username) {
+        User user = readByUsername(username).orElseThrow(() -> new EntityNotFound("user: username"));
+        return user.getCart();
+    }
+
+    @Override
     public User update(String username, User user) {
         if (repository.findByUsername(user.getUsername()).isEmpty())
             throw new EntityNotFound(user);

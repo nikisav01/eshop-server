@@ -38,6 +38,8 @@ public class CartItemConverter {
         return new CartItemDTO(
                 cartItem.getCartItemID(),
                 cartItem.getProduct().getProductID(),
+                cartItem.getProduct().getProductName(),
+                cartItem.getProduct().getPrice(),
                 cartItem.getCart().getCartID(),
                 cartItem.getQuantity()
         );
