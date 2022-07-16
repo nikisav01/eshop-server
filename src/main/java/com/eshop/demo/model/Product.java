@@ -28,6 +28,9 @@ public class Product {
 
     private Integer quantity;
 
+    @OneToMany(mappedBy = "product")
+    private List<Image> images;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<CartItem> cartItem;
 

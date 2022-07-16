@@ -20,7 +20,8 @@ public class ProductUpdateConverter {
                 new ArrayList<>(),
                 productUpdateDTO.getPrice(),
                 productUpdateDTO.getQuantity(),
-                null,
+                new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
     }

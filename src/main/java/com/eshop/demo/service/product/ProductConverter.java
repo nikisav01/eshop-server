@@ -11,6 +11,7 @@ import com.eshop.demo.service.user.UserSPI;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +43,8 @@ public class ProductConverter {
                         .collect(Collectors.toList()),
                 productDTO.getPrice(),
                 productDTO.getQuantity(),
-                null,
+                new ArrayList<>(),
+                new ArrayList<>(),
                 productDTO.getUsersSavedIDs().stream()
                         .map(userID -> userSPI.readById(userID).orElseThrow(EntityNotFound::new))
                         .collect(Collectors.toList())
